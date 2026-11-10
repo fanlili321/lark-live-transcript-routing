@@ -38,8 +38,8 @@
 
 ### 问答字数统计
 
-- **必须用官方脚本统计，禁止拿字符长度（如 Python `len()`）顶替**：`../lark-doc/scripts/doc_word_stat.py` 才是飞书文档"字数统计"的口径（英文按单词算、贴着英文的英文标点不计入等），直接数字符会把每个英文字母、每个标点都算 1 个字，数值明显偏高，跟人工/飞书 UI 看到的对不上（2026-08-07 领导复核就是因为这个被指出"字数略微不准确"）。
-- 用法：把该问题的正文内容包成 `<p>...</p>` 拼接的 XML 片段，`cat fragment.xml | python3 ../lark-doc/scripts/doc_word_stat.py --protocol xml`，读输出里的 `word_count` 字段（不是 `char_count`）。
+- **必须用官方脚本统计，禁止拿字符长度（如 Python `len()`）顶替**：全局 `lark-doc` 的 `lark-cli docs +script --command parse` 才是当前可用的飞书文档字数统计口径，返回 `data.profile.word_count` 与 `char_count`。不要直接数字符。
+- 用法：把该问题的正文内容包成 `<p>...</p>` 拼接的 XML 片段，通过标准输入传给 `lark-cli docs +script --command parse --content - --format json`，读取输出的 `data.profile.word_count` 字段（不是 `char_count`）。
 - **在所有文字修改（分段、表述规范、语气词删除等）都完成之后，作为最后一步统一计算**，不要在中途某个阶段就把字数定死——后续任何编辑都会让数字过期。
 - 不遗漏任何段落，逐题统计，写入该问题标题的 `（{字数}字）`。
 
